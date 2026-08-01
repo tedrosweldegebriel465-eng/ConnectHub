@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- SEO & Social Meta Tags -->
+  <title>⚡ ConnectHub — Real-Time Social & TikTok-Style Short Video Platform</title>
+  <meta name="description" content="Experience ⚡ ConnectHub: full-stack social media, vertical short video clips, real-time messaging, multi-reactions, polls, 24h stories, and dark mode." />
+  <meta name="keywords" content="connecthub, social media, short video clips, tiktok, real-time chat, express, socket.io, dark mode" />
+  <meta name="author" content="Tedros Weldegebriel" />
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="⚡ ConnectHub — Next-Gen Real-Time Social & Clips Platform" />
+  <meta property="og:description" content="Connect, share moments, stream vertical short videos, chat live, and engage with your community." />
+  <meta property="og:image" content="/images/og-preview.png" />
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Structured Data JSON-LD for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ConnectHub",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "All",
+    "description": "Next-generation real-time social media and vertical short video platform.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    /* ==========================================================================
+       ADVANCED STYLES & GLASSMORPHISM DESIGN SYSTEM
+       ========================================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
+      --success: #10b981;
+      --warning: #f59e0b;
+      
+      --bg: #fafaff;
+      --bg-gradient: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12), transparent 70%),
+                     radial-gradient(circle at 100% 50%, rgba(236, 72, 153, 0.08), transparent 50%),
+                     radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.1), transparent 60%);
+      --card: rgba(255, 255, 255, 0.85);
+      --card-solid: #ffffff;
+      --card-border: rgba(226, 232, 240, 0.8);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 12px 24px -4px rgba(99, 102, 241, 0.12);
+      --shadow-lg: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+
+      --font-body: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --bg-gradient: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2), transparent 75%),
+                     radial-gradient(circle at 90% 40%, rgba(236, 72, 153, 0.12), transparent 60%),
+                     radial-gradient(circle at 10% 80%, rgba(139, 92, 246, 0.15), transparent 70%);
+      --card: rgba(18, 24, 38, 0.85);
+      --card-solid: #121826;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(18, 24, 38, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.12);
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-light: #64748b;
+
+      --shadow-md: 0 12px 30px -4px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    html { visibility: hidden; scroll-behavior: smooth; }
+    html.ready { visibility: visible; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Animations ---- */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ---- Utility Classes ---- */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ---- Buttons ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #ffffff;
+      box-shadow: 0 8px 20px -4px var(--primary-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px var(--primary-glow);
+      filter: brightness(1.08);
+    }
+    .btn-secondary {
+      background: var(--card-solid);
+      color: var(--text-main);
+      border-color: var(--card-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-secondary:hover {
+      background: var(--glass-bg);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .btn-glow {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-glow::after {
+      content: '';
+      position: absolute;
+      top: -50%; right: -50%; bottom: -50%; left: -50%;
+      background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+      transform: rotate(45deg) translate(-200%, -200%);
+      transition: transform 0.8s ease-in-out;
+    }
+    .btn-glow:hover::after {
+      transform: rotate(45deg) translate(200%, 200%);
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .theme-toggle {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--card-solid);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: rotate(15deg);
+    }
+
+    /* ==========================================================================
+       HERO SECTION
+       ========================================================================== */
+    .hero {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 4rem 2rem 5rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 2.2rem;
+      max-width: 540px;
+    }
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Hero Mockup Widget */
+    .mockup-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .mockup-card {
+      width: 100%;
+      max-width: 440px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 1.5rem;
+      animation: floatCard 6s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+    }
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+    .mockup-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar-ring {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+    }
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .user-meta h4 { font-size: 0.95rem; font-weight: 700; }
+    .user-meta span { font-size: 0.78rem; color: var(--text-muted); }
+    .mockup-body {
+      background: var(--card-solid);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      border: 1px solid var(--card-border);
+      margin-bottom: 1.2rem;
+    }
+    .mockup-text {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .mockup-media {
+      width: 100%;
+      height: 180px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(236, 72, 153, 0.8)),
+                  url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .mockup-reactions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .reaction-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .reaction-pill:hover, .reaction-pill.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: scale(1.08);
+    }
+
+    /* Floating Badges */
+    .float-badge {
+      position: absolute;
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-md);
+      z-index: 3;
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    .fb-1 { top: 10%; right: -25px; }
+    .fb-2 { bottom: 12%; left: -25px; animation-delay: 2s; }
+
+    /* ==========================================================================
+       INTERACTIVE LIVE DEMO SECTION
+       ========================================================================== */
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-title-wrap {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-tag {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .section-h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+
+    /* Interactive Poll Box */
+    .poll-box {
+      background: var(--card-solid);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+    .poll-option {
+      margin-bottom: 1rem;
+      position: relative;
+      cursor: pointer;
+    }
+    .poll-btn {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--card-border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .poll-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.25));
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+    .poll-option.selected .poll-btn {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* ==========================================================================
+       FEATURES GRID
+       ========================================================================== */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+    .feature-card {
+      background: var(--card-solid);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .feat-icon-box {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.15));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.4rem;
+    }
+    .feature-card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+    }
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    /* ==========================================================================
+       TESTIMONIALS CAROUSEL
+       ========================================================================== */
+    .review-card {
+      background: var(--card-solid);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .stars {
+      color: var(--warning);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .quote-text {
+      font-size: 0.98rem;
+      color: var(--text-main);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ==========================================================================
+       FAQ ACCORDION
+       ========================================================================== */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .faq-item {
+      background: var(--card-solid);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    .faq-question {
+      width: 100%;
+      padding: 1.25rem 1.6rem;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      padding: 0 1.6rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+      padding: 0 1.6rem 1.4rem;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+    .faq-icon {
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    /* ==========================================================================
+       CTA BANNER & FOOTER
+       ========================================================================== */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+      border-radius: var(--radius-lg);
+      padding: 4.5rem 2rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -10px var(--primary-glow);
+    }
+    .cta-banner h2 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .cta-banner p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      max-width: 580px;
+      margin: 0 auto 2.2rem;
+    }
+
+    .footer {
+      border-top: 1px solid var(--card-border);
+      background: var(--card-solid);
+      padding: 4rem 2rem 2rem;
+      margin-top: 5rem;
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-col h4 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.2rem;
+      color: var(--text-main);
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .footer-col a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: color 0.2s ease;
+    }
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-desc { margin: 0 auto 2rem; }
+      .hero-cta { justify-content: center; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2.5rem; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      var t = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", t);
+      window.redirectIfAuthed();
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ==========================================================================
+     HEADER / NAVBAR
+     ========================================================================== -->
+  <header class="header glass">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+        <span>ConnectHub</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="clips.html" style="color:var(--primary);font-weight:800;"><i class="fa-solid fa-play"></i> Clips ⚡</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#demo">Live Demo</a></li>
+          <li><a href="#reviews">Community</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+        </button>
+        <a href="login.html" class="btn btn-secondary">Sign In</a>
+        <a href="register.html" class="btn btn-primary btn-glow">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+     HERO SECTION
+     ========================================================================== -->
+  <section class="hero">
+    <div>
+      <div class="hero-badge">
+        <i class="fa-solid fa-sparkles"></i> Experience Next-Gen Socializing
+      </div>
+      <h1 class="hero-title">
+        Real connection,<br />
+        <span class="gradient-text">amplified in real-time.</span>
+      </h1>
+      <p class="hero-desc">
+        Share high-vibe posts, create interactive polls, react with dynamic multi-emojis, and stream instant DMs with live online indicators.
+      </p>
+      <div class="hero-cta">
+        <a href="register.html" class="btn btn-primary btn-glow" style="padding:0.9rem 2rem; font-size:1.05rem;">
+          Join the Platform Free <i class="fa-solid fa-rocket"></i>
+        </a>
+        <a href="#demo" class="btn btn-secondary" style="padding:0.9rem 1.8rem; font-size:1.05rem;">
+          <i class="fa-solid fa-circle-play"></i> Watch Interactive Demo
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-number" data-target="10000">0</div>
+          <div class="stat-label">Active Creators</div>
+        </div>
+        <div>
+          <div class="stat-number" data-target="50000">0</div>
+          <div class="stat-label">Daily Interactions</div>
+        </div>
+        <div>
+          <div class="stat-number" data-target="99.9">0%</div>
+          <div class="stat-label">Real-time Uptime</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Interactive Hero Mockup Card -->
+    <div class="mockup-container">
+      <div class="mockup-card glass">
+        <div class="mockup-header">
+          <div class="mockup-user">
+            <div class="avatar-ring">
+              <div class="avatar-img">TM</div>
+            </div>
+            <div class="user-meta">
+              <h4>Teklit Mebrahtu <i class="fa-solid fa-circle-check" style="color:var(--primary);"></i></h4>
+              <span>@teklit_m • Just now</span>
+            </div>
+          </div>
+          <i class="fa-solid fa-ellipsis" style="color:var(--text-muted);"></i>
+        </div>
+
+        <div class="mockup-body">
+          <p class="mockup-text">Building a modern social application with custom glassmorphism and real-time Socket.io streams! What reaction describes your mood today? 👇</p>
+          <div class="mockup-media">
+            <span><i class="fa-solid fa-bolt"></i> Powered by Socket.io & Express</span>
+          </div>
+          
+          <div class="mockup-reactions" id="interactive-reactions">
+            <span class="reaction-pill active" data-count="142"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> <span>142</span></span>
+            <span class="reaction-pill" data-count="89"><i class="fa-solid fa-fire" style="color:#f97316;"></i> <span>89</span></span>
+            <span class="reaction-pill" data-count="56"><i class="fa-solid fa-hands-clapping" style="color:#eab308;"></i> <span>56</span></span>
+            <span class="reaction-pill" data-count="34"><i class="fa-solid fa-rocket" style="color:#3b82f6;"></i> <span>34</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Badges -->
+      <div class="float-badge fb-1 glass">
+        <div style="width:36px;height:36px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;color:white;">
+          <i class="fa-solid fa-comment-dots"></i>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:0.85rem;">New Live Message</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">"Hey! The new feed is blazing fast ⚡"</div>
+        </div>
+      </div>
+
+      <div class="float-badge fb-2 glass">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:white;">
+          <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:0.85rem;">@freweyni_tech followed you</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">1 second ago</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+     INTERACTIVE DEMO / POLL FEATURE
+     ========================================================================== -->
+  <section class="section" id="demo">
+    <div class="section-title-wrap">
+      <span class="section-tag">Interactive Features</span>
+      <h2 class="section-h2">Try live polls directly on your feed</h2>
+      <p class="section-desc">Gather instant feedback from your community with interactive voting widgets that calculate real-time percentages.</p>
+    </div>
+
+    <div style="max-width:680px; margin:0 auto;">
+      <div class="poll-box">
+        <h3 style="margin-bottom:1.2rem; font-weight:800;">📊 Community Poll: What is your favorite feature in ConnectHub?</h3>
+        
+        <div class="poll-option" onclick="votePoll(this, 68)">
+          <div class="poll-btn">
+            <span style="position:relative;z-index:2;">⚡ Instant Real-Time Messaging</span>
+            <span class="poll-percent" style="position:relative;z-index:2;">68%</span>
+          </div>
+          <div class="poll-fill" style="width:68%;"></div>
+        </div>
+
+        <div class="poll-option" onclick="votePoll(this, 22)">
+          <div class="poll-btn">
+            <span style="position:relative;z-index:2;">🎨 Dark Mode &amp; Glassmorphic UI</span>
+            <span class="poll-percent" style="position:relative;z-index:2;">22%</span>
+          </div>
+          <div class="poll-fill" style="width:22%;"></div>
+        </div>
+
+        <div class="poll-option" onclick="votePoll(this, 10)">
+          <div class="poll-btn">
+            <span style="position:relative;z-index:2;">🔥 Multi-Emoji Post Reactions</span>
+            <span class="poll-percent" style="position:relative;z-index:2;">10%</span>
+          </div>
+          <div class="poll-fill" style="width:10%;"></div>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-muted); text-align:right; margin-top:0.8rem;">1,248 votes • Real-time poll demo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+     FEATURES GRID
+     ========================================================================== -->
+  <section class="section" id="features">
+    <div class="section-title-wrap">
+      <span class="section-tag">Designed For Creators</span>
+      <h2 class="section-h2">Everything you need in one polished platform</h2>
+      <p class="section-desc">Engineered from the ground up for maximum speed, security, and delightful user engagement.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="feature-card">
+        <div class="feat-icon-box"><i class="fa-solid fa-comments"></i></div>
+        <h3>Real-time Socket Chat</h3>
+        <p>Direct 1-on-1 messaging powered by Socket.io with live typing indicators and instant message delivery.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-box"><i class="fa-solid fa-heart-pulse"></i></div>
+        <h3>Multi-Emoji Reactions</h3>
+        <p>Express yourself beyond basic likes with dynamic heart, fire, clap, and rocket reactions.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-box"><i class="fa-solid fa-circle-user"></i></div>
+        <h3>Active Online Status</h3>
+        <p>See when your friends are online in real-time with vibrant green active indicators across the platform.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-box"><i class="fa-solid fa-images"></i></div>
+        <h3>Media Lightbox Gallery</h3>
+        <p>Click any post image to enter a sleek zoomable fullscreen lightbox viewer with gesture support.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-box"><i class="fa-solid fa-moon"></i></div>
+        <h3>Adaptive Dark &amp; Light Mode</h3>
+        <p>Seamlessly switch themes with persistence across sessions. Easy on your eyes, day or night.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feat-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>JWT Security &amp; Encryption</h3>
+        <p>Production-grade authorization with encrypted JWT tokens, password hashing, and input validation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+     COMMUNITY & TESTIMONIALS
+     ========================================================================== -->
+  <section class="section" id="reviews">
+    <div class="section-title-wrap">
+      <span class="section-tag">Community Love</span>
+      <h2 class="section-h2">Loved by creators worldwide</h2>
+      <p class="section-desc">See what our community members have to say about their experience.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="review-card">
+        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p class="quote-text">"The real-time messaging is astonishingly fast. The glassmorphism dark theme looks insanely premium!"</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="avatar-ring" style="width:38px;height:38px;"><div class="avatar-img">AT</div></div>
+          <div>
+            <div style="font-weight:700;font-size:0.9rem;">Alazar Tesfay</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">UI/UX Designer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p class="quote-text">"Creating polls and seeing instant live percentage votes changed how I engage my audience."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="avatar-ring" style="width:38px;height:38px;"><div class="avatar-img">SK</div></div>
+          <div>
+            <div style="font-weight:700;font-size:0.9rem;">Senait Kifleyesus</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Content Creator</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <p class="quote-text">"Clean architecture, zero lag, and super responsive on both mobile and desktop screens."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="avatar-ring" style="width:38px;height:38px;"><div class="avatar-img">DG</div></div>
+          <div>
+            <div style="font-weight:700;font-size:0.9rem;">Dawit Gebre</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Full Stack Developer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+     FAQ SECTION
+     ========================================================================== -->
+  <section class="section" id="faq">
+    <div class="section-title-wrap">
+      <span class="section-tag">Got Questions?</span>
+      <h2 class="section-h2">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-item active">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Is ConnectHub free to join?
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          Yes! ConnectHub is completely free for supervised program participants. You can register with a valid invite code, publish posts, stream messages, and interact with polls without any cost.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How does the real-time chat work?
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          Our backend connects directly via WebSocket protocol using Socket.io. This enables sub-millisecond message delivery, live typing status, and real-time notification alerts.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I customize my profile and upload media?
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </button>
+        <div class="faq-answer">
+          Absolutely. You can customize your bio, full name, avatar, and cover photo, as well as upload images and media directly to your posts.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+     CTA BANNER
+     ========================================================================== -->
+  <section class="section">
+    <div class="cta-banner">
+      <h2>Ready to Experience Next-Gen Socializing?</h2>
+      <p>Join thousands of creators sharing their world in real-time. Create your account in less than 30 seconds.</p>
+      <a href="register.html" class="btn btn-secondary btn-glow" style="padding:1rem 2.5rem; font-size:1.1rem;">
+        Get Started Now <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+     FOOTER
+     ========================================================================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <a href="#" class="logo" style="margin-bottom:1rem;">
+          <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+          <span>ConnectHub</span>
+        </a>
+        <p style="color:var(--text-muted); font-size:0.9rem; max-width:280px;">
+          Empowering real-time connections through modern Web technologies.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#demo">Live Demo</a></li>
+          <li><a href="#reviews">Testimonials</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="register.html">Register Account</a></li>
+          <li><a href="feed.html">Explore Feed</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="help.html">Help Center</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <div style="display:flex; gap:12px; margin-top:0.5rem;">
+          <a href="#" class="theme-toggle" style="text-decoration:none;"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="theme-toggle" style="text-decoration:none;"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="theme-toggle" style="text-decoration:none;"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 ⚡ ConnectHub. All rights reserved.</span>
+      <span>Crafted with <i class="fa-solid fa-heart" style="color:#ef4444;"></i> for Tedros Weldegebriel</span>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+     INTERACTIVE JAVASCRIPT
+     ========================================================================== -->
+  <script>
+    // Theme Toggle Logic
+    const themeBtn = document.getElementById('theme-btn');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
+      themeIcon.className = t === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+    
+    setTheme(localStorage.getItem('theme') || 'light');
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Animated Counter for Stats
+    document.addEventListener('DOMContentLoaded', () => {
+      const stats = document.querySelectorAll('.stat-number');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = parseFloat(el.dataset.target);
+          let current = 0;
+          const step = target / 50;
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              el.textContent = target >= 1000 ? (target / 1000).toFixed(0) + 'K+' : target + '%';
+              clearInterval(timer);
+            } else {
+              el.textContent = target >= 1000 ? Math.floor(current / 1000) + 'K+' : Math.floor(current) + '%';
+            }
+          }, 30);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      stats.forEach(s => observer.observe(s));
+
+      // Interactive Mockup Reactions Click
+      document.querySelectorAll('#interactive-reactions .reaction-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('#interactive-reactions .reaction-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          const countSpan = pill.querySelector('span');
+          let count = parseInt(countSpan.textContent);
+          countSpan.textContent = count + 1;
+        });
+      });
+    });
+
+    // FAQ Accordion Toggle
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const isActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!isActive) item.classList.add('active');
+    }
+
+    // Interactive Poll Vote Demo
+    function votePoll(opt, percent) {
+      document.querySelectorAll('.poll-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    }
+  </script>
+  <script src="js/cookie-banner.js"></script>
+</body>
+</html>

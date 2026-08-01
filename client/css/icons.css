@@ -1,0 +1,190 @@
+/*
+ * icons.css — SVG icon system
+ * Replaces Font Awesome with inline CSS-based icons
+ * This ensures icons always work regardless of CDN
+ */
+
+/* Nav icon buttons */
+.nav-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #6b7280);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.nav-icon-btn:hover { background: var(--bg, #f3f4f6); color: var(--text, #111827); text-decoration: none; }
+.nav-icon-btn.active { color: var(--primary, #4f46e5); background: var(--primary-light, #eef2ff); }
+.nav-icon-btn svg { display: block; width: 20px; height: 20px; }
+.logout-btn:hover { background: var(--danger-light, #fee2e2) !important; color: var(--danger, #ef4444) !important; }
+
+/* Replace <i class="fas fa-*"> with SVG data URIs using ::before pseudo */
+/* This is a CSS-only fallback when Font Awesome fails to load */
+.fas, .fab, .far {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+/* Spinner animation for fas fa-spin */
+.fa-spin { animation: fa-spin 1s linear infinite; }
+@keyframes fa-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Loading spinner using CSS only (no FA needed) */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 1.5rem;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.875rem;
+}
+.loading-spinner::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--border, #e5e7eb);
+  border-top-color: var(--primary, #4f46e5);
+  border-radius: 50%;
+  animation: fa-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+/* Hide broken FA icon inside loading-spinner */
+.loading-spinner i { display: none; }
+
+/* Tool buttons in create post */
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #6b7280);
+  transition: background 0.15s, color 0.15s;
+}
+.tool-btn:hover { background: var(--primary-light, #eef2ff); color: var(--primary, #4f46e5); }
+.tool-btn i { display: none; } /* hide FA, show nothing — JS will add SVG */
+
+/* Post action buttons */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted, #6b7280);
+  transition: background 0.1s, color 0.1s;
+}
+.action-btn:hover { background: var(--bg, #f3f4f6); color: var(--primary, #4f46e5); }
+.action-btn.liked { color: var(--danger, #ef4444); }
+.action-btn.liked:hover { background: var(--danger-light, #fee2e2); color: var(--danger, #ef4444); }
+.action-btn.bookmarked { color: var(--warning, #f59e0b); }
+.action-btn.reposted { color: var(--success, #22c55e); }
+.action-btn svg { flex-shrink: 0; }
+
+/* Modal close button */
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: var(--text-muted, #6b7280);
+  padding: 4px;
+  line-height: 1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:hover { background: var(--bg, #f3f4f6); color: var(--text, #111827); }
+.modal-close i { font-size: inherit; }
+
+/* Submit comment button */
+#submit-comment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.85rem;
+}
+#submit-comment i { display: none; }
+#submit-comment::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E") no-repeat center;
+}
+
+/* Post button */
+#post-btn i { display: none; }
+#post-btn::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E") no-repeat center;
+  margin-right: 4px;
+}
+
+/* Send message button */
+#send-btn i { display: none; }
+#send-btn::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='22' y1='2' x2='11' y2='13'/%3E%3Cpolygon points='22 2 15 22 11 13 2 9 22 2'/%3E%3C/svg%3E") no-repeat center;
+}
+
+/* Feed tabs icons — hide FA, keep text */
+.feed-tab i, .explore-tab i, .tab-btn i { display: none; }
+.feed-tab, .explore-tab, .tab-btn { gap: 0; }
+
+/* Section titles — hide FA icons, keep text */
+.section-title i { display: none; }
+
+/* Story add button — replace FA plus */
+.story-avatar .fas.fa-plus::before { content: '+'; font-style: normal; }
+#story-own-avatar .fas { font-family: inherit; }
+#story-own-avatar .fas::before { content: '+'; }
+
+/* Back button */
+.back-btn i { display: none; }
+.back-btn::before { content: '← '; }
+
+/* Save Changes button */
+#save-profile-btn i { display: none; }
+#cancel-edit-btn i { display: none; }
+
+/* Mark all read button */
+#mark-all-read-btn i { display: none; }
+
+/* New message button */
+#new-msg-btn i { display: none; }
+#new-msg-btn::before { content: '+ '; }
+
+/* Empty new message button */
+#empty-new-msg-btn i { display: none; }
+#empty-new-msg-btn::before { content: '+ '; }
+
+/* Load more button */
+#load-more-btn i { display: none; }

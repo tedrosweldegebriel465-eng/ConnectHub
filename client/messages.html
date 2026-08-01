@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Private real-time messages - ⚡ ConnectHub" />
+  <meta name="theme-color" content="#4f46e5" />
+  
+  <title>Messages – ⚡ ConnectHub</title>
+  
+  <!-- Fonts & Font Awesome 6 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <script src="js/config.js"></script>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      window.requireAuth('Please login to continue');
+    })();
+  </script>
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/icons.css" />
+  <link rel="stylesheet" href="css/messages.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="feed.html" class="nav-logo" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="var(--primary)">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <line x1="9" y1="9" x2="9.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="15" y1="9" x2="15.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>ConnectHub</span>
+    </a>
+    
+    <div class="nav-search" role="search">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search people..." 
+        autocomplete="off"
+        aria-label="Search users"
+      />
+      <div id="search-results" class="search-dropdown hidden" role="listbox"></div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Feed -->
+      <a href="feed.html" class="nav-icon-btn" title="Feed" aria-label="Feed">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+      <!-- Clips -->
+      <a href="clips.html" class="nav-icon-btn" title="ConnectClips ⚡" aria-label="ConnectClips ⚡">
+        <i class="fa-solid fa-play"></i>
+      </a>
+      
+      <!-- Explore -->
+      <a href="explore.html" class="nav-icon-btn" title="Explore" aria-label="Explore">
+        <i class="fa-solid fa-compass"></i>
+      </a>
+      
+      <!-- Messages (active) -->
+      <a href="messages.html" class="nav-icon-btn active" id="msg-link" title="Messages" aria-label="Messages" style="position:relative;">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span class="msg-badge hidden" id="msg-badge"></span>
+      </a>
+      
+      <!-- Bookmarks -->
+      <a href="bookmarks.html" class="nav-icon-btn" title="Bookmarks" aria-label="Bookmarks">
+        <i class="fa-solid fa-bookmark"></i>
+      </a>
+      
+      <!-- Profile -->
+      <a href="profile.html" class="nav-icon-btn" id="profile-link" title="Profile" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
+      </a>
+      
+      <!-- Notifications -->
+      <button class="nav-icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications" style="position:relative;">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-badge hidden" id="notif-badge"></span>
+      </button>
+      
+      <!-- Theme Toggle -->
+      <button class="nav-icon-btn theme-btn" id="theme-btn" title="Toggle dark mode" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+      
+      <!-- Logout -->
+      <button class="nav-icon-btn logout-btn" id="logout-btn" title="Logout" aria-label="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== MESSAGES CONTAINER ===== -->
+  <main class="container messages-container" id="main-content" role="main">
+    <div class="messages-layout card">
+      <!-- Inbox Sidebar -->
+      <aside class="inbox-sidebar" id="inbox-sidebar">
+        <div class="inbox-header">
+          <h3><i class="fa-solid fa-comments" style="color:var(--primary);"></i> Direct Messages</h3>
+          <button class="btn btn-primary btn-sm" id="new-msg-btn" title="New Message">
+            <i class="fa-solid fa-plus"></i> New
+          </button>
+        </div>
+        
+        <!-- Inbox Search Bar -->
+        <div class="inbox-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input 
+            type="text" 
+            id="inbox-search" 
+            placeholder="Search conversations..." 
+            autocomplete="off"
+          />
+        </div>
+        
+        <!-- Inbox List -->
+        <div id="inbox-list" class="inbox-list">
+          <div class="loading-spinner" style="text-align:center;padding:2rem;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading messages...
+          </div>
+        </div>
+      </aside>
+
+      <!-- Chat Main Window Area -->
+      <section class="chat-area" id="chat-area">
+        <!-- Empty Selection View -->
+        <div class="chat-empty" id="chat-empty">
+          <div class="empty-chat-icon"><i class="fa-solid fa-paper-plane"></i></div>
+          <h3>Select a Conversation</h3>
+          <p>Choose a creator from your inbox or start a direct message.</p>
+          <button class="btn btn-primary" id="empty-new-msg-btn">
+            <i class="fa-solid fa-pen-to-square"></i> Start New Chat
+          </button>
+
+          <!-- Quick Suggested Contacts -->
+          <div class="suggested-contacts-wrap">
+            <div class="suggested-title">Quick Contacts</div>
+            <div id="suggested-contacts-list" class="suggested-contacts-list"></div>
+          </div>
+        </div>
+        
+        <!-- Open Active Chat -->
+        <div class="chat-open hidden" id="chat-open">
+          <!-- Chat Header -->
+          <div class="chat-header" id="chat-header">
+            <div class="chat-user-info" id="chat-user-click">
+              <div class="avatar-circle" id="chat-avatar">U</div>
+              <div class="chat-user-details">
+                <div class="chat-user-name" id="chat-user-name">User</div>
+                <div class="chat-user-status" id="chat-user-status">
+                  <span class="status-dot online"></span> Online
+                </div>
+              </div>
+            </div>
+            <div class="chat-header-actions">
+              <button class="icon-btn" id="chat-call-btn" title="Voice call">
+                <i class="fa-solid fa-phone"></i>
+              </button>
+              <button class="icon-btn" id="chat-video-btn" title="Video call">
+                <i class="fa-solid fa-video"></i>
+              </button>
+              <button class="icon-btn" id="chat-info-btn" title="View profile">
+                <i class="fa-solid fa-user"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Message Bubbles Container -->
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-date-divider">
+              <span>Today</span>
+            </div>
+          </div>
+          
+          <!-- Typing Indicator -->
+          <div class="typing-indicator hidden" id="typing-indicator">
+            <div class="typing-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="typing-text">Someone is typing...</span>
+          </div>
+          
+          <!-- Chat Input Bar -->
+          <div class="chat-input-area">
+            <button class="chat-input-btn" id="emoji-btn" title="Emoji">
+              <i class="fa-regular fa-face-smile"></i>
+            </button>
+            <input 
+              type="text" 
+              id="chat-input" 
+              placeholder="Type a message..." 
+              maxlength="1000" 
+              autocomplete="off"
+            />
+            <button class="btn btn-primary" id="send-btn" title="Send message">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===== NEW MESSAGE MODAL ===== -->
+  <div id="new-msg-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" style="max-width:440px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square" style="color:var(--primary);"></i> New Message</h3>
+        <button class="modal-close" id="close-new-msg">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label style="font-weight:600;font-size:0.88rem;">Search for a creator</label>
+          <input 
+            type="text" 
+            id="dm-search" 
+            placeholder="Type name or username..." 
+            class="form-control" 
+            autocomplete="off"
+          />
+        </div>
+        <div id="dm-search-results" class="dm-search-results">
+          <div class="dm-search-hint">
+            <p style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:1.5rem 0;">Search users to start a direct message</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="js/config.js"></script>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/messages.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Your saved posts and collections - ⚡ ConnectHub" />
+  <meta name="theme-color" content="#4f46e5" />
+  
+  <title>Bookmarks – ⚡ ConnectHub</title>
+  
+  <!-- Fonts & Font Awesome 6 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <script src="js/config.js"></script>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      window.requireAuth('Please login to continue');
+    })();
+  </script>
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/icons.css" />
+  <link rel="stylesheet" href="css/bookmarks.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="feed.html" class="nav-logo" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="var(--primary)">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <line x1="9" y1="9" x2="9.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="15" y1="9" x2="15.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>ConnectHub</span>
+    </a>
+    
+    <div class="nav-search" role="search">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search people..." 
+        autocomplete="off"
+        aria-label="Search users"
+      />
+      <div id="search-results" class="search-dropdown hidden" role="listbox"></div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Feed -->
+      <a href="feed.html" class="nav-icon-btn" title="Feed" aria-label="Feed">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+      <!-- Clips -->
+      <a href="clips.html" class="nav-icon-btn" title="ConnectClips ⚡" aria-label="ConnectClips ⚡">
+        <i class="fa-solid fa-play"></i>
+      </a>
+      
+      <!-- Explore -->
+      <a href="explore.html" class="nav-icon-btn" title="Explore" aria-label="Explore">
+        <i class="fa-solid fa-compass"></i>
+      </a>
+      
+      <!-- Messages -->
+      <a href="messages.html" class="nav-icon-btn" id="msg-link" title="Messages" aria-label="Messages" style="position:relative;">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span class="msg-badge hidden" id="msg-badge"></span>
+      </a>
+      
+      <!-- Bookmarks (active) -->
+      <a href="bookmarks.html" class="nav-icon-btn active" title="Bookmarks" aria-label="Bookmarks">
+        <i class="fa-solid fa-bookmark"></i>
+      </a>
+      
+      <!-- Profile -->
+      <a href="profile.html" class="nav-icon-btn" id="profile-link" title="Profile" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
+      </a>
+      
+      <!-- Notifications -->
+      <button class="nav-icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications" style="position:relative;">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-badge hidden" id="notif-badge"></span>
+      </button>
+      
+      <!-- Theme Toggle -->
+      <button class="nav-icon-btn theme-btn" id="theme-btn" title="Toggle dark mode" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+      
+      <!-- Logout -->
+      <button class="nav-icon-btn logout-btn" id="logout-btn" title="Logout" aria-label="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="container bookmarks-layout" id="main-content" role="main">
+    <!-- Hero Header -->
+    <div class="bookmarks-header">
+      <div class="page-header">
+        <h1>
+          <i class="fa-solid fa-bookmark" style="color:var(--primary);"></i> 
+          Saved Posts
+        </h1>
+        <p class="page-subtitle">Your personal library of saved posts, code snippets, and design inspiration.</p>
+      </div>
+      
+      <!-- Actions -->
+      <div class="bookmarks-actions">
+        <button class="btn btn-outline btn-sm" id="export-bookmarks-btn" title="Export bookmarks">
+          <i class="fa-solid fa-download"></i> Export
+        </button>
+        <button class="btn btn-danger btn-sm" id="clear-bookmarks-btn" title="Clear all bookmarks">
+          <i class="fa-solid fa-trash-can"></i> Clear All
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="bookmarks-stats" id="bookmarks-stats">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-bookmark"></i></div>
+        <div>
+          <span class="stat-number" id="stat-total">0</span>
+          <span class="stat-label">Total Saved</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(34,197,94,0.1);color:var(--success);"><i class="fa-solid fa-calendar-week"></i></div>
+        <div>
+          <span class="stat-number" id="stat-this-week">0</span>
+          <span class="stat-label">Saved This Week</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(245,158,11,0.1);color:var(--warning);"><i class="fa-solid fa-folder-closed"></i></div>
+        <div>
+          <span class="stat-number" id="stat-collections">3</span>
+          <span class="stat-label">Collections</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="bookmarks-controls">
+      <div class="bookmarks-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input 
+          type="text" 
+          id="bookmarks-search-input" 
+          placeholder="Search saved posts..." 
+          autocomplete="off"
+        />
+      </div>
+      
+      <div class="bookmarks-filters">
+        <select id="sort-bookmarks" class="form-control">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="most-liked">Most Liked</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="bookmarks-grid">
+      <!-- Left Main Feed Column -->
+      <section class="bookmarks-main">
+        <!-- Collections Bar -->
+        <div class="collections-section">
+          <div class="collections-header">
+            <h3><i class="fa-solid fa-folder-open" style="color:var(--warning);"></i> Collections</h3>
+            <button class="btn btn-primary btn-sm" id="create-collection-btn">
+              <i class="fa-solid fa-plus"></i> New
+            </button>
+          </div>
+          <div class="collections-list" id="collections-list">
+            <!-- Dynamic Collections Pills -->
+          </div>
+        </div>
+
+        <!-- Bookmarked Posts Container -->
+        <div id="bookmarks-container">
+          <div class="loading-spinner" style="text-align:center;padding:3rem;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading saved posts...
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Sidebar Column -->
+      <aside class="bookmarks-sidebar">
+        <!-- Suggested for you -->
+        <div class="card sidebar-card">
+          <h3 class="section-title">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary);"></i>
+            Suggested for you
+          </h3>
+          <div id="suggested-bookmarks">
+            <div class="loading-spinner" style="text-align:center;padding:1rem;">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Popular Tags -->
+        <div class="card sidebar-card">
+          <h3 class="section-title">
+            <i class="fa-solid fa-hashtag" style="color:var(--secondary);"></i>
+            Popular Tags
+          </h3>
+          <div id="popular-tags" class="hashtag-list">
+            <div class="loading-spinner" style="text-align:center;padding:1rem;">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ===== CREATE COLLECTION MODAL ===== -->
+  <div id="collection-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" style="max-width:420px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-folder-plus" style="color:var(--primary);"></i> New Collection</h3>
+        <button class="modal-close" id="close-collection-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="collection-form">
+          <div class="form-group" style="margin-bottom:1rem;">
+            <label style="font-weight:600;font-size:0.88rem;">Collection Name</label>
+            <input type="text" id="collection-name" placeholder="e.g. Design Ideas" class="form-control" required maxlength="50" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Create Collection</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CLEAR CONFIRM MODAL ===== -->
+  <div id="clear-confirm-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" style="max-width:400px;text-align:center;">
+      <div class="modal-header">
+        <h3>Clear All Bookmarks?</h3>
+        <button class="modal-close" id="close-clear-modal">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1.5rem 0;">
+        <i class="fa-solid fa-trash-can" style="font-size:2.5rem;color:var(--danger);margin-bottom:1rem;"></i>
+        <p style="color:var(--text-muted);font-size:0.9rem;">Are you sure you want to remove all saved posts?</p>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:1.5rem;">
+          <button class="btn btn-outline" id="cancel-clear-btn">Cancel</button>
+          <button class="btn btn-danger" id="confirm-clear-btn">Yes, Clear All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/bookmarks.js"></script>
+</body>
+</html>

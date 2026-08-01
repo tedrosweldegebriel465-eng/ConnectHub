@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — ⚡ ConnectHub</title>
+  <meta name="description" content="Log in to ConnectHub to stream ConnectClips, message friends in real-time, and engage with your community." />
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    /* ==========================================================================
+       PROFESSIONAL AUTH GLASSMORPHISM SYSTEM
+       ========================================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.12);
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.12);
+
+      --bg: #f8fafc;
+      --bg-gradient: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15), transparent 50%),
+                     radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.12), transparent 50%);
+      
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(226, 232, 240, 0.9);
+      --input-bg: #ffffff;
+      --input-border: #e2e8f0;
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+
+      --shadow-lg: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+      --radius-lg: 24px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --bg-gradient: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.22), transparent 60%),
+                     radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.18), transparent 60%);
+
+      --card-bg: rgba(18, 24, 38, 0.88);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --input-bg: #1e293b;
+      --input-border: rgba(255, 255, 255, 0.15);
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+
+      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    html { visibility: hidden; }
+    html.ready { visibility: visible; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+    }
+
+    /* ---- Header Navbar ---- */
+    .top-nav {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+    .theme-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+    }
+    .theme-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: rotate(15deg);
+    }
+
+    /* ---- Main Split Wrapper ---- */
+    .auth-wrapper {
+      max-width: 1100px;
+      width: 100%;
+      margin: 1rem auto 3rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    /* Left Hero Card */
+    .auth-hero-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.9));
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 520px;
+    }
+    .hero-bg-orb {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(236, 72, 153, 0.35);
+      filter: blur(60px);
+      top: -50px;
+      right: -50px;
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: fit-content;
+      margin-bottom: 2rem;
+    }
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .hero-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .hero-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .feat-check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+
+    /* Right Auth Form Card */
+    .auth-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 2.8rem 2.4rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .auth-header {
+      margin-bottom: 1.8rem;
+    }
+    .auth-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .auth-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap i.field-icon {
+      position: absolute;
+      left: 16px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 44px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .input-wrap input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+    .input-wrap input:focus + i.field-icon,
+    .input-wrap input:focus ~ i.field-icon {
+      color: var(--primary);
+    }
+    .eye-btn {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      transition: color 0.2s ease;
+    }
+    .eye-btn:hover { color: var(--primary); }
+
+    .forgot-pass {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.4rem;
+    }
+    .forgot-pass a {
+      color: var(--primary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .forgot-pass a:hover { text-decoration: underline; }
+
+    /* Alert Boxes */
+    .alert {
+      padding: 0.8rem 1.1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert-error {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .alert-success {
+      background: var(--success-light);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -4px var(--primary-glow);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px var(--primary-glow);
+      filter: brightness(1.08);
+    }
+    .submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--input-border);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 1.6rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .auth-footer a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .auth-footer a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .auth-wrapper { grid-template-columns: 1fr; }
+      .auth-hero-card { display: none; }
+    }
+  </style>
+
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      var t = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", t);
+      window.redirectIfAuthed();
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="top-nav">
+    <a href="index.html" class="brand-logo">
+      <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
+      <span>ConnectHub</span>
+    </a>
+    <button class="theme-btn" id="theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
+      <i class="fa-solid fa-moon" id="theme-icon"></i>
+    </button>
+  </header>
+
+  <!-- Main Auth Split Content -->
+  <main class="auth-wrapper">
+    <!-- Left Hero Branding -->
+    <div class="auth-hero-card">
+      <div class="hero-bg-orb"></div>
+      <div>
+        <div class="hero-badge">
+          <i class="fa-solid fa-sparkles"></i> Welcome to ⚡ ConnectHub
+        </div>
+        <h1 class="hero-title">Connect with creators around the globe.</h1>
+        <p class="hero-desc">Experience TikTok-style short video clips, real-time messaging, multi-emoji reactions, and live community feeds.</p>
+        <ul class="hero-features">
+          <li><div class="feat-check"><i class="fa-solid fa-check"></i></div> ⚡ ConnectClips Short-Video Feed</li>
+          <li><div class="feat-check"><i class="fa-solid fa-check"></i></div> Sub-millisecond WebSocket Messaging</li>
+          <li><div class="feat-check"><i class="fa-solid fa-check"></i></div> 256-bit Encrypted Secure Authentication</li>
+        </ul>
+      </div>
+
+      <div style="font-size:0.85rem; opacity:0.8; display:flex; align-items:center; gap:8px;">
+        <i class="fa-solid fa-shield-halved"></i> Production-Grade Security Verified
+      </div>
+    </div>
+
+    <!-- Right Login Form Card -->
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Welcome back</h2>
+        <p>Log in to continue connecting with friends</p>
+      </div>
+
+      <!-- Alert Box -->
+      <div class="alert alert-error" id="error-msg"><i class="fa-solid fa-circle-exclamation"></i> <span></span></div>
+      <div class="alert alert-success" id="success-msg"><i class="fa-solid fa-circle-check"></i> <span></span></div>
+
+      <!-- Form -->
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrap">
+            <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required />
+            <i class="fa-solid fa-envelope field-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required />
+            <i class="fa-solid fa-lock field-icon"></i>
+            <button type="button" class="eye-btn" id="toggle-pw" tabindex="-1" aria-label="Toggle password visibility">
+              <i class="fa-solid fa-eye" id="eye-icon"></i>
+            </button>
+          </div>
+          <div class="forgot-pass">
+            <a href="#" id="forgot-link">Forgot password?</a>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="login-btn">
+          Log In <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="register.html">Sign up for free</a>
+      </div>
+    </div>
+  </main>
+
+  <div style="padding:1rem; text-align:center; font-size:0.8rem; color:var(--text-muted);">
+    &copy; 2026 ⚡ ConnectHub. All rights reserved. · <a href="privacy.html" style="color:var(--text-muted);">Privacy</a> · <a href="terms.html" style="color:var(--text-muted);">Terms</a> · <a href="help.html" style="color:var(--text-muted);">Help</a>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script>
+    const API = window.API_BASE_URL;
+
+    // Theme Toggle
+    const themeBtn = document.getElementById("theme-btn");
+    const themeIcon = document.getElementById("theme-icon");
+
+    function setTheme(t) {
+      document.documentElement.setAttribute("data-theme", t);
+      localStorage.setItem("theme", t);
+      themeIcon.className = t === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    }
+    setTheme(localStorage.getItem("theme") || "light");
+    themeBtn.addEventListener("click", () => {
+      const cur = document.documentElement.getAttribute("data-theme");
+      setTheme(cur === "dark" ? "light" : "dark");
+    });
+
+    // Password Show/Hide Toggle
+    const toggleBtn = document.getElementById("toggle-pw");
+    const eyeIcon = document.getElementById("eye-icon");
+    const pwInput = document.getElementById("password");
+
+    toggleBtn.addEventListener("click", () => {
+      const isShowing = pwInput.type === "text";
+      pwInput.type = isShowing ? "password" : "text";
+      eyeIcon.className = isShowing ? "fa-solid fa-eye" : "fa-solid fa-eye-slash";
+      pwInput.focus();
+    });
+
+    // Forgot password alert
+    document.getElementById("forgot-link").addEventListener("click", (e) => {
+      e.preventDefault();
+      showSuccess("If this email exists in our secure system, a password reset link has been dispatched.");
+    });
+
+    function showError(msg) {
+      const el = document.getElementById("error-msg");
+      el.querySelector('span').textContent = msg;
+      el.style.display = "flex";
+      document.getElementById("success-msg").style.display = "none";
+    }
+    function showSuccess(msg) {
+      const el = document.getElementById("success-msg");
+      el.querySelector('span').textContent = msg;
+      el.style.display = "flex";
+      document.getElementById("error-msg").style.display = "none";
+    }
+
+    // Form submission
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      document.getElementById("error-msg").style.display = "none";
+      document.getElementById("success-msg").style.display = "none";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const btn = document.getElementById("login-btn");
+
+      if (!email || !password) {
+        showError("Please enter both email and password.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Logging in...`;
+
+      try {
+        const res = await fetch(`${API}/auth/login`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.toLowerCase(), password }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Login failed");
+
+        const token = data.token;
+        const user = data.user || data;
+        if (!token) throw new Error("No token returned");
+
+        window.AuthStorage?.setSession(token, user);
+
+        showSuccess("Welcome back! Redirecting to feed...");
+        setTimeout(() => window.location.replace("feed.html"), 600);
+      } catch (err) {
+        showError(err.message || "Login failed. Please check your credentials.");
+        btn.disabled = false;
+        btn.innerHTML = `Log In <i class="fa-solid fa-arrow-right"></i>`;
+      }
+    });
+  </script>
+</body>
+</html>

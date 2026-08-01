@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="View post and comments - ⚡ ConnectHub" />
+  <meta name="theme-color" content="#4f46e5" />
+  
+  <title>Post – ⚡ ConnectHub</title>
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <script src="js/config.js"></script>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+
+      if (!window.AuthStorage?.isAuthenticated()) {
+        sessionStorage.setItem('redirectMessage', 'Please login to view this post');
+        window.location.replace('login.html');
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id');
+
+      if (!postId) {
+        sessionStorage.setItem('toastMessage', 'No post specified');
+        sessionStorage.setItem('toastType', 'warning');
+        window.location.replace('feed.html');
+        return;
+      }
+
+      document.documentElement.setAttribute('data-post-id', postId);
+      document.documentElement.classList.add('ready');
+    })();
+  </script>
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/icons.css" />
+  <link rel="stylesheet" href="css/post.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="feed.html" class="nav-logo" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="var(--primary)">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <line x1="9" y1="9" x2="9.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="15" y1="9" x2="15.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>ConnectHub</span>
+    </a>
+    
+    <div class="nav-search" role="search">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search people..." 
+        autocomplete="off"
+        aria-label="Search users"
+        aria-describedby="search-results"
+      />
+      <div id="search-results" class="search-dropdown hidden" role="listbox"></div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Feed -->
+      <a href="feed.html" class="nav-icon-btn" title="Feed" aria-label="Feed">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+      <!-- Clips -->
+      <a href="clips.html" class="nav-icon-btn" title="ConnectClips ⚡" aria-label="ConnectClips ⚡">
+        <i class="fa-solid fa-play"></i>
+      </a>
+      
+      <!-- Explore -->
+      <a href="explore.html" class="nav-icon-btn" title="Explore" aria-label="Explore">
+        <i class="fa-solid fa-compass"></i>
+      </a>
+      
+      <!-- Messages -->
+      <a href="messages.html" class="nav-icon-btn" id="msg-link" title="Messages" aria-label="Messages" style="position:relative;">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span class="msg-badge hidden" id="msg-badge"></span>
+      </a>
+      
+      <!-- Bookmarks -->
+      <a href="bookmarks.html" class="nav-icon-btn" title="Bookmarks" aria-label="Bookmarks">
+        <i class="fa-solid fa-bookmark"></i>
+      </a>
+      
+      <!-- Profile -->
+      <a href="profile.html" class="nav-icon-btn" id="profile-link" title="Profile" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
+      </a>
+      
+      <!-- Notifications -->
+      <button class="nav-icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications" style="position:relative;">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-badge hidden" id="notif-badge"></span>
+      </button>
+      
+      <!-- Theme Toggle -->
+      <button class="nav-icon-btn theme-btn" id="theme-btn" title="Toggle dark mode" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+      
+      <!-- Logout -->
+      <button class="nav-icon-btn logout-btn" id="logout-btn" title="Logout" aria-label="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== NOTIFICATIONS DROPDOWN ===== -->
+  <div id="notif-dropdown" class="notif-dropdown hidden" role="dialog" aria-label="Notifications">
+    <div class="notif-header">
+      <span>Notifications</span>
+      <button class="btn btn-sm btn-outline" id="mark-all-read-btn">
+        ✓✓ Mark all read
+      </button>
+    </div>
+    <div class="notif-list" id="notif-list">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i> Loading...
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="container" id="main-content" role="main">
+    <!-- Back Button -->
+    <nav class="post-navigation" aria-label="Post navigation">
+      <button class="btn btn-secondary btn-sm back-btn" onclick="history.back()" aria-label="Go back">← Back</button>
+      <div class="post-actions-top">
+        <button class="btn btn-sm btn-outline" id="share-post-btn" aria-label="Share post">
+           Share
+        </button>
+        <button class="btn btn-sm btn-outline" id="report-post-btn" aria-label="Report post">
+           Report
+        </button>
+      </div>
+    </nav>
+
+    <!-- Post Detail -->
+    <section id="post-detail-container" aria-label="Post detail">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i> Loading post...
+      </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="card comments-section" aria-label="Comments">
+      <div class="comments-header">
+        <h3>
+           Comments
+          <span class="comment-count" id="comment-count">(0)</span>
+        </h3>
+        <button class="btn btn-sm btn-outline" id="sort-comments-btn">
+           Newest
+        </button>
+      </div>
+      
+      <!-- Comments List -->
+      <div id="comments-list" class="comments-list" role="list">
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i> Loading comments...
+        </div>
+      </div>
+      
+      <!-- Comment Input -->
+      <div class="comment-input-area">
+        <div class="comment-avatar">
+          <div class="avatar-circle sm" id="comment-user-avatar">U</div>
+        </div>
+        <div class="comment-input-wrapper">
+          <input 
+            type="text" 
+            id="comment-input" 
+            placeholder="Write a comment..." 
+            maxlength="300"
+            aria-label="Write a comment"
+            autocomplete="off"
+          />
+          <div class="comment-input-actions">
+            <span class="char-counter" id="comment-counter">0/300</span>
+            <button class="btn btn-primary btn-sm" id="submit-comment" disabled>
+               Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== MODALS ===== -->
+  
+  <!-- Report Modal -->
+  <div id="report-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" style="max-width:420px;">
+      <div class="modal-header">
+        <h3 id="report-modal-title">Report Post</h3>
+        <button class="modal-close" id="close-report-modal" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="report-form" novalidate>
+          <div class="form-group">
+            <label for="report-reason">Reason for reporting</label>
+            <select id="report-reason" class="form-control" required>
+              <option value="">Select a reason...</option>
+              <option value="spam">Spam or misleading</option>
+              <option value="harassment">Harassment or bullying</option>
+              <option value="hate_speech">Hate speech</option>
+              <option value="nsfw">NSFW content</option>
+              <option value="copyright">Copyright infringement</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="report-description">Description (optional)</label>
+            <textarea id="report-description" rows="3" maxlength="300" placeholder="Please provide more details..."></textarea>
+            <small class="char-count"><span id="report-desc-count">0</span>/300</small>
+          </div>
+          <button type="submit" class="btn btn-danger btn-block">
+             Submit Report
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="share-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" style="max-width:420px;">
+      <div class="modal-header">
+        <h3 id="share-modal-title">Share Post</h3>
+        <button class="modal-close" id="close-share-modal" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="share-options">
+          <button class="share-option" data-platform="twitter">
+            <i class="fab fa-twitter" style="color:#1DA1F2;"></i>
+            <span>Twitter</span>
+          </button>
+          <button class="share-option" data-platform="facebook">
+            <i class="fab fa-facebook" style="color:#4267B2;"></i>
+            <span>Facebook</span>
+          </button>
+          <button class="share-option" data-platform="linkedin">
+            <i class="fab fa-linkedin" style="color:#0A66C2;"></i>
+            <span>LinkedIn</span>
+          </button>
+          <button class="share-option" data-platform="whatsapp">
+            <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+            <span>WhatsApp</span>
+          </button>
+          <button class="share-option" data-platform="copy">
+            <i class="fas fa-link" style="color:var(--text-muted);"></i>
+            <span>Copy Link</span>
+          </button>
+        </div>
+        <div class="share-link-container">
+          <input type="text" id="share-link" class="form-control" readonly />
+          <button class="btn btn-primary btn-sm" id="copy-link-btn">
+             Copy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/post.js"></script>
+</body>
+</html>

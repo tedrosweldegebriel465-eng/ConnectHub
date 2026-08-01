@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover trending content and connect with new creators - ⚡ ConnectHub" />
+  <meta name="theme-color" content="#4f46e5" />
+  
+  <title>Explore – ⚡ ConnectHub</title>
+  
+  <!-- Fonts & Font Awesome 6 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <script src="js/config.js"></script>
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      window.requireAuth('Please login to continue');
+    })();
+  </script>
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/icons.css" />
+  <link rel="stylesheet" href="css/feed.css" />
+  <link rel="stylesheet" href="css/explore.css" />
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="feed.html" class="nav-logo" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="var(--primary)">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <line x1="9" y1="9" x2="9.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="15" y1="9" x2="15.01" y2="9" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>ConnectHub</span>
+    </a>
+    
+    <div class="nav-search" role="search">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search people..." 
+        autocomplete="off"
+        aria-label="Search users"
+      />
+      <div id="search-results" class="search-dropdown hidden" role="listbox"></div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Feed -->
+      <a href="feed.html" class="nav-icon-btn" title="Feed" aria-label="Feed">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+      <!-- Clips -->
+      <a href="clips.html" class="nav-icon-btn" title="ConnectClips ⚡" aria-label="ConnectClips ⚡">
+        <i class="fa-solid fa-play"></i>
+      </a>
+      
+      <!-- Explore (active) -->
+      <a href="explore.html" class="nav-icon-btn active" title="Explore" aria-label="Explore">
+        <i class="fa-solid fa-compass"></i>
+      </a>
+      
+      <!-- Messages -->
+      <a href="messages.html" class="nav-icon-btn" id="msg-link" title="Messages" aria-label="Messages" style="position:relative;">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span class="msg-badge hidden" id="msg-badge"></span>
+      </a>
+      
+      <!-- Bookmarks -->
+      <a href="bookmarks.html" class="nav-icon-btn" title="Bookmarks" aria-label="Bookmarks">
+        <i class="fa-solid fa-bookmark"></i>
+      </a>
+      
+      <!-- Profile -->
+      <a href="profile.html" class="nav-icon-btn" id="profile-link" title="Profile" aria-label="Profile">
+        <i class="fa-solid fa-user"></i>
+      </a>
+      
+      <!-- Notifications -->
+      <button class="nav-icon-btn" id="notif-btn" title="Notifications" aria-label="Notifications" style="position:relative;">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-badge hidden" id="notif-badge"></span>
+      </button>
+      
+      <!-- Theme Toggle -->
+      <button class="nav-icon-btn theme-btn" id="theme-btn" title="Toggle dark mode" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+      
+      <!-- Logout -->
+      <button class="nav-icon-btn logout-btn" id="logout-btn" title="Logout" aria-label="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="container explore-container" id="main-content" role="main">
+    <!-- Explore Hero Header -->
+    <div class="explore-hero card">
+      <div class="explore-hero-content">
+        <div class="explore-badge"><i class="fa-solid fa-compass"></i> DISCOVER CONTENT</div>
+        <h1>Explore Trending Topics & Creators</h1>
+        <p>Stay up to date with viral conversations, featured creators, and media across the community.</p>
+        
+        <div class="explore-search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="explore-search-input" placeholder="Search posts, hashtags (#code), or people..." />
+          <button class="btn btn-primary btn-sm" id="explore-search-btn">
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Pills Navigation -->
+    <div class="category-pills" id="category-pills">
+      <button class="category-pill active" data-category="all"><i class="fa-solid fa-fire"></i> Trending</button>
+      <button class="category-pill" data-category="tech"><i class="fa-solid fa-laptop-code"></i> Technology</button>
+      <button class="category-pill" data-category="design"><i class="fa-solid fa-palette"></i> Design & Art</button>
+      <button class="category-pill" data-category="code"><i class="fa-solid fa-code"></i> AI & Code</button>
+      <button class="category-pill" data-category="photo"><i class="fa-solid fa-camera"></i> Photography</button>
+      <button class="category-pill" data-category="music"><i class="fa-solid fa-music"></i> Music</button>
+    </div>
+
+    <!-- Explore Grid Layout -->
+    <div class="explore-grid">
+      <!-- Main Feed Column -->
+      <section class="explore-main">
+        <!-- Explore Navigation Tabs -->
+        <div class="explore-tabs card">
+          <button class="explore-tab active" id="tab-trending" data-tab="trending">
+            <i class="fa-solid fa-fire"></i> Trending
+          </button>
+          <button class="explore-tab" id="tab-recent" data-tab="recent">
+            <i class="fa-solid fa-clock"></i> Recent
+          </button>
+          <button class="explore-tab" id="tab-media" data-tab="media">
+            <i class="fa-solid fa-photo-film"></i> Media
+          </button>
+          <button class="explore-tab" id="tab-people" data-tab="people">
+            <i class="fa-solid fa-users"></i> Top Creators
+          </button>
+        </div>
+
+        <!-- Trending Hashtags Chips Bar -->
+        <div class="card trending-tags-card" style="padding:1.25rem;margin-bottom:1.25rem;">
+          <h3 class="section-title" style="font-size:0.95rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;">
+            <i class="fa-solid fa-hashtag" style="color:var(--primary);"></i> Hot Hashtags
+          </h3>
+          <div id="trending-tags" class="hashtag-chips-wrap">
+            <div class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i> Loading hashtags...</div>
+          </div>
+        </div>
+
+        <!-- Posts Container -->
+        <div id="explore-posts-container" class="posts-list">
+          <div class="loading-spinner" style="text-align:center;padding:3rem;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading explore posts...
+          </div>
+        </div>
+      </section>
+
+      <!-- Sidebar Column -->
+      <aside class="explore-sidebar">
+        <!-- Popular Users Card -->
+        <div class="card sidebar-card">
+          <h3 class="section-title">
+            <i class="fa-solid fa-user-plus" style="color:var(--primary);"></i> Popular Creators
+          </h3>
+          <div id="popular-users" class="popular-users-list">
+            <div class="loading-spinner"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>
+          </div>
+        </div>
+
+        <!-- Explore Stats Card -->
+        <div class="card sidebar-card explore-stats-card">
+          <h3 class="section-title">
+            <i class="fa-solid fa-chart-line" style="color:var(--success);"></i> Explore Stats
+          </h3>
+          <div class="explore-stats-grid">
+            <div class="explore-stat-item">
+              <span class="stat-value" id="stat-posts-today">1,420</span>
+              <span class="stat-label">Posts Today</span>
+            </div>
+            <div class="explore-stat-item">
+              <span class="stat-value" id="stat-active-users">385</span>
+              <span class="stat-label">Active Users</span>
+            </div>
+            <div class="explore-stat-item">
+              <span class="stat-value" id="stat-trending-tags">24</span>
+              <span class="stat-label">Trending Tags</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toast-container" role="alert" aria-live="polite"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/explore.js"></script>
+</body>
+</html>
