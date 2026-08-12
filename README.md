@@ -343,25 +343,6 @@ The server will start on `http://localhost:5000`. You can open the client web ap
 
 ---
 
-## ☁ Cloud Deployment Guide
-
-### Frontend (Netlify / Vercel / Render)
-1. Connect your GitHub repository to **Vercel** or **Netlify**.
-2. Set the root build directory to `client/` (or serve as static HTML5 application).
-3. Set your production environment variable `API_BASE_URL` pointing to your deployed API server URL.
-
-### Backend API (Render / Railway / Fly.io)
-1. Connect repository to **Render** or **Railway**.
-2. Set build command to `npm install` and start command to `node server/app.js`.
-3. Configure environment variables (`PORT`, `MONGODB_URI`, `JWT_SECRET`, `NODE_ENV=production`).
-
-### Database (MongoDB Atlas)
-1. Create a cloud cluster on **MongoDB Atlas**.
-2. Add your deployment server IP to Network Access whitelist.
-3. Supply the connection string to `MONGODB_URI` in backend environment settings.
-
----
-
 ## 🔮 Future Enhancements & Roadmap
 
 - 🔐 **OAuth 2.0 Integration**: Single Sign-On via Google and GitHub credentials.
